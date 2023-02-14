@@ -45,6 +45,7 @@ body {
 }
 
 #lever {
+	display: none;
 	position: absolute;
 	top: 0px;
 	right: -3px;
@@ -137,8 +138,8 @@ body {
 }
 
 #spinner span {
-	font-size: 12.45px;
-	line-height: 14px;
+	font-size: 10px;
+	line-height: 13px;
 	text-transform: uppercase;
 	font-family: Eastman;
 	font-weight: 600;
@@ -147,6 +148,11 @@ body {
 	border: 1.25px solid #FFE160;
 	border-radius: 4px;
 	background-color: #009D23;
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+	max-width: 80%;
+	text-align: center;
 }
 
 #spinner.active span {
@@ -420,25 +426,34 @@ h1 {
 	/* margin-left: -20px; */
 }
 
+.modal-text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: url('../img/modal-bg-mob.png') no-repeat;
+	background-size: cover;
+	width: 264px;
+	height: 164px;
+}
+
 .text {
-	transform-origin: center;
 	text-align: center;
-	transform: rotate(-90deg);
-	width: 80%;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-	margin-left: 4px;
+	margin-bottom: 15px;
 }
 
 .text1 {
 	color: #fff;
 	text-transform: uppercase;
 	font-family: Eastman;
-	font-size: 6px;
+	font-size: 16px;
+	line-height: 22px;
 	font-weight: 600;
-	line-height: 9px;
 	letter-spacing: 0em;
 	text-align: center;
 }
@@ -447,8 +462,8 @@ h1 {
 	font-family: 'Eastman';
 	font-style: normal;
 	font-weight: 600;
-	font-size: 15px;
-	line-height: 16px;
+	font-size: 26px;
+	line-height: 36px;
 	display: flex;
 	align-items: center;
 	text-align: center;
@@ -457,8 +472,6 @@ h1 {
 	background-clip: text;
 	-webkit-background-clip: text;
 	background-image: linear-gradient(to bottom right, #F5E5A9 0%, #FFC700 61.46%, #C49C22 100%);
-	margin-bottom: 5px;
-	margin-top: 5px;
 }
 
 
@@ -659,7 +672,7 @@ h1 {
 	}
 }
 
-.footer-img {
+/* .footer-img {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -669,7 +682,7 @@ h1 {
 	background-size: 100%;
 	background-position: 0% 100%;
 	z-index: 0;
-}
+} */
 
 .footer {
 	display: flex;
@@ -736,7 +749,7 @@ h1 {
 	height: 100%;
 	max-height: 370px;
 	position: fixed;
-	top: 50%;
+	top: 37%;
 	left: 50%;
 	display: flex;
 	flex-direction: row;
@@ -759,23 +772,12 @@ h1 {
 	justify-content: center;
 	align-items: center;
 	margin: 0 auto;
-	background: #FFF;
 	overflow-y: auto;
-	background: url('../img/modal-bg-mob.png') no-repeat;
 	background-size: 100%;
 	transition: all .3s;
 }
 
-.modal img {
-	width: 98px;
-	height: 98px;
-}
-
 .modal button {
-	position: absolute;
-	left: 50%;
-	bottom: 20%;
-	transform: translateX(-50%);
 	background: linear-gradient(to bottom right, #96FB01 0%, #028C37 100%);
 	box-shadow: 1.58348px 1.58348px 0px rgba(0, 0, 0, 0.0816916);
 	border-radius: 3.95869px;
@@ -855,6 +857,89 @@ canvas {
 	margin-left: 7px;
 }
 
+.big-win {
+	display: none;
+	position: fixed;
+	top: 35%;
+	left: 0;
+	transform: translateY(-50%);
+	width: 100%;
+	height: auto;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	z-index: 3;
+}
+
+.big-win.active {
+	display: flex;
+}
+
+#big-win-img-modal {
+	z-index: 3;
+	width: 267px;
+	height: 147px;
+}
+
+#big-win-img-modal {
+	z-index: 3;
+	width: 267px;
+	height: 147px;
+	transform: scale(0);
+	transition: transform .1s linear;
+}
+
+#big-win-img-modal.active {
+	transform: scale(1);
+}
+
+.bw-barrels {
+	width: 100%;
+	height: 100px;
+	max-width: 340px;
+	position: relative;
+}
+
+#lBarrel,
+#mBarrel,
+#rBarrel {
+	position: absolute;
+	top: 0;
+	transform: translateX(-50%);
+	transition: transform .1s linear;
+}
+
+#lBarrel {
+	left: 30%;
+	z-index: 1;
+	transform: translateX(-350%)
+}
+
+#mBarrel {
+	left: 50%;
+	top: 20%;
+	z-index: 2;
+	transform: translateY(350%)
+}
+
+#rBarrel {
+	left: 70%;
+	z-index: 1;
+	transform: translateX(300%)
+}
+
+#lBarrel.active,
+#mBarrel.active,
+#rBarrel.active {
+	transform: translate(-50%, 0);
+}
+
+@media (min-width: 480px) {
+	#lever {
+		display: block;
+	}
+}
+
 @media (min-width: 1024px) {
 
 	#app-wrapper {
@@ -898,7 +983,7 @@ canvas {
 	}
 
 	#spinner span {
-		font-size: 30px;
+		font-size: 25px;
 		line-height: 34px;
 		font-weight: 600;
 		color: #fff;
@@ -915,6 +1000,15 @@ canvas {
 
 	#lever.active {
 		transform: matrix(1, 0, 0, -1, 0, 11);
+	}
+
+	.big-win {
+		position: fixed;
+		top: 0;
+		left: 0;
+		transform: translateY(0);
+		width: 100%;
+		height: 100%;
 	}
 
 	.logo {
@@ -934,84 +1028,38 @@ canvas {
 		max-width: none;
 	}
 
-	/* .deal-wheel-wrapper::before {
-		content: '';
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -52%);
-		min-height: 676px;
-		min-width: 676px;
-		background: url('../img/wheel-bg.png') no-repeat;
-		background-size: 492px;
-		background-position: 50%;
-	} */
+	#big-win-img,
+	#big-win-img-modal {
+		width: 626px;
+		height: 344px;
+	}
+
+	.modal-text {
+		background: url('../img/modal-bg.png') no-repeat;
+		background-size: cover;
+		width: 506px;
+		height: 320px;
+	}
 
 	.text {
-		/* margin-left: -10px; */
+		margin-bottom: 25px;
 	}
 
 	.text1 {
-		font-size: 12px;
-		line-height: 17px;
+		color: #fff;
+		text-transform: uppercase;
+		font-family: Eastman;
+		font-size: 30px;
+		line-height: 41px;
+		font-weight: 600;
+		letter-spacing: 0em;
+		text-align: center;
 	}
 
 	.textPrize {
-		font-size: 24px;
-		line-height: 28px;
-		margin-bottom: 5px;
-	}
-
-	/* .deal-wheel-wrapper::after {
-		content: '';
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -58.7%) rotate(-0.7deg);
-		min-height: 676px;
-		min-width: 676px;
-		background: url(../img/wheel-sectors.png) no-repeat;
-		background-size: 402px;
-		background-position: 50%;
-	} */
-
-	.deal-wheel {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		/* задаём переменные блока */
-		/* размеры колеса */
-		--size: clamp(250px, 80vmin, 400px);
-	}
-
-	.dw-t-l {
-		top: 5%;
-		left: 50%;
-		min-height: 200px;
-		min-width: 150px;
-		background-size: 150px;
-		transform: translateX(-210%);
-	}
-
-	.dw-b-l {
-		display: block;
-		bottom: 8%;
-		left: 50%;
-		min-height: 200px;
-		min-width: 214px;
-		background-size: 215px;
-		transform: translateX(-175%);
-	}
-
-	.dw-t-r {
-		top: 2%;
-		right: 50%;
-		min-height: 220px;
-		min-width: 300px;
-		background-size: 300px;
-		transform: translateX(147%);
+		font-weight: 600;
+		font-size: 50px;
+		line-height: 69px;
 	}
 
 	.btn-spin {
@@ -1155,26 +1203,15 @@ canvas {
 	.modal {
 		display: flex;
 		width: 650px;
-		height: 625px;
+		height: 665px;
 		max-width: 100%;
 		flex-direction: column;
 		margin: 0 auto;
-		background: #FFF;
 		overflow-y: auto;
-		background: url('../img/modal-bg-desk.png') no-repeat;
-		background-size: 100%;
 		transition: all .3s;
 	}
 
-	.modal img {
-		width: 212px;
-		height: 212px;
-	}
-
 	.modal button {
-		position: absolute;
-		left: 50%;
-		bottom: 17%;
 		border-radius: 8.59561px;
 		padding: 10px 54px;
 		font-size: 26px;

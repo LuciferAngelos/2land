@@ -261,6 +261,76 @@ window.onload = (function () {
 		const spinBtn = document.querySelector('#spinner');
 		const attemptsCounter = document.querySelectorAll('.atCount');
 		const lever = document.querySelector('#lever');
+		const bigWin = document.querySelector('.big-win');
+		const bigWinImg = document.querySelector('#big-win-img-modal');
+		const lBarrel = document.querySelector('#lBarrel');
+		const mBarrel = document.querySelector('#mBarrel');
+		const rBarrel = document.querySelector('#rBarrel');
+		const overlay = document.querySelector('.modal-overlay')
+		const wrapper = document.querySelector('.modal-wrapper')
+		const modal = document.querySelector('.modal')
+		const container = document.querySelector('.fireworks')
+		const fireworks = new Fireworks.default(container, {
+			autoresize: true,
+			opacity: 0.5,
+			acceleration: 1.45,
+			friction: 0.97,
+			gravity: 1.5,
+			particles: 200,
+			traceLength: 10,
+			traceSpeed: 10,
+			explosion: 10,
+			intensity: 30,
+			flickering: 50,
+			lineStyle: 'round',
+			hue: {
+				min: 0,
+				max: 360
+			},
+			delay: {
+				min: 30,
+				max: 60
+			},
+			rocketsPoint: {
+				min: 50,
+				max: 50
+			},
+			lineWidth: {
+				explosion: {
+					min: 1,
+					max: 10
+				},
+				trace: {
+					min: 1,
+					max: 10
+				}
+			},
+			brightness: {
+				min: 50,
+				max: 80
+			},
+			decay: {
+				min: 0.015,
+				max: 0.03
+			},
+			mouse: {
+				click: false,
+				move: false,
+				max: 1
+			},
+			// sound: {
+			// 	enabled: true
+			// }
+		});
+
+		let macAudio = document.querySelector('#mac')
+		document.body.addEventListener('click', () => {
+			macAudio.load();
+		})
+		document.body.addEventListener('touchstart', () => {
+			macAudio.load();
+		})
+
 		let atCount = 2;
 
 
@@ -366,7 +436,7 @@ window.onload = (function () {
 						this.querySelectorAll('.box').forEach((box, index) => {
 							box.style.filter = 'blur(0)';
 							box.dataset.spinned = '1';
-							box.dataset.doNotLookHere = items.find(el => el.id === +box.dataset.id).winner
+							// box.dataset.doNotLookHere = items.find(el => el.id === +box.dataset.id).winner
 						});
 					},
 					{ once: true }
@@ -384,13 +454,45 @@ window.onload = (function () {
 					spinBtn.classList.remove('active');
 					lever.classList.remove('active');
 					if (spinCount === 3) {
-						alert('Achievement unlocked! Попасть 2 раза подряд по кнопке! Ты выиграл! Вот твои тыщу спинов и тыщу якорей в задницу!')
+						macAudio.play();
+						fireworks.start();
+
+						overlay.classList.add('active');
+						wrapper.classList.add('active');
+						modal.classList.add('active');
 						return
 					} else {
 						if (leftBlock.dataset.doNotLookHere === 'true' &&
 							middleBlock.dataset.doNotLookHere === 'true' &&
 							rightBlock.dataset.doNotLookHere === 'true') {
-							alert('Честная победа, чо!')
+							bigWin.classList.add('active')
+							bigWinImg.classList.add('active');
+
+							setTimeout(() => {
+								lBarrel.classList.add('active');
+							}, 200);
+							setTimeout(() => {
+								mBarrel.classList.add('active');
+							}, 400);
+							setTimeout(() => {
+								rBarrel.classList.add('active');
+							}, 600);
+
+							setTimeout(() => {
+								bigWin.classList.remove('active')
+								bigWinImg.classList.remove('active');
+								lBarrel.classList.remove('active');
+								mBarrel.classList.remove('active');
+								rBarrel.classList.remove('active');
+
+								macAudio.play();
+								fireworks.start();
+								overlay.classList.add('active');
+								wrapper.classList.add('active');
+								modal.classList.add('active');
+
+							}, 2000);
+
 						}
 						return
 					}

@@ -259,6 +259,7 @@ window.onload = (function () {
 
 		const doors = document.querySelectorAll('.door');
 		const spinBtn = document.querySelector('#spinner');
+		const atBlocks = document.querySelectorAll('.attempts');
 		const attemptsCounter = document.querySelectorAll('.atCount');
 		const lever = document.querySelector('#lever');
 		const bigWin = document.querySelector('.big-win');
@@ -266,10 +267,11 @@ window.onload = (function () {
 		const lBarrel = document.querySelector('#lBarrel');
 		const mBarrel = document.querySelector('#mBarrel');
 		const rBarrel = document.querySelector('#rBarrel');
-		const overlay = document.querySelector('.modal-overlay')
-		const wrapper = document.querySelector('.modal-wrapper')
-		const modal = document.querySelector('.modal')
-		const container = document.querySelector('.fireworks')
+		const overlay = document.querySelector('.modal-overlay');
+		const wrapper = document.querySelector('.modal-wrapper');
+		const modal = document.querySelector('.modal');
+		const fireball = document.querySelector('#fireball');
+		const container = document.querySelector('.fireworks');
 		const fireworks = new Fireworks.default(container, {
 			autoresize: true,
 			opacity: 0.5,
@@ -277,7 +279,7 @@ window.onload = (function () {
 			friction: 0.97,
 			gravity: 1.5,
 			particles: 200,
-			traceLength: 10,
+			traceLength: 1,
 			traceSpeed: 10,
 			explosion: 10,
 			intensity: 30,
@@ -302,7 +304,7 @@ window.onload = (function () {
 				},
 				trace: {
 					min: 1,
-					max: 10
+					max: 1
 				}
 			},
 			brightness: {
@@ -324,17 +326,18 @@ window.onload = (function () {
 		});
 
 		let macAudio = document.querySelector('#mac')
-		document.body.addEventListener('click', () => {
+		window.addEventListener('click', () => {
 			macAudio.load();
 		})
-		document.body.addEventListener('touchstart', () => {
+		window.addEventListener('touchstart', () => {
 			macAudio.load();
 		})
 
 		let atCount = 2;
-
+		let disabled = false;
 
 		spinBtn.addEventListener('click', spin);
+		lever.addEventListener('click', spin);
 
 
 		let generalBoxesClone,
@@ -407,99 +410,120 @@ window.onload = (function () {
 		}
 
 		async function spin() {
-			atCount -= 1;
-			attemptsCounter.forEach(at => at.innerText = ` ${atCount}`);
-			lever.classList.add('active');
-			poolHeight = (poolHeight / 2) + (boxHeight);
+			if (!disabled) {
+				if (atCount === 1) {
+					spinBtn.classList.remove('pulseAnim');
+					atBlocks.forEach(block => block.classList.remove('pulseAnim'));
+				}
 
-			for (const door of doors) {
-				const boxes = door.querySelector('.boxes');
-				const duration = parseInt(boxes.style.transitionDuration);
-				boxes.style.transform = !door.dataset.spinned ? `translateY(-${poolHeight / 2}px)` : `translateY(0)`
+				atCount -= 1;
+				disabled = true;
+				attemptsCounter.forEach(at => at.innerText = ` ${atCount}`);
+				poolHeight = (poolHeight / 2) + (boxHeight);
 
-				await new Promise((resolve) => setTimeout(resolve, duration * 10));
+				lever.classList.add('active');
+				spinBtn.classList.add('active');
+				fireball.classList.add('active');
 
-				generalBoxesClone.addEventListener(
-					'transitionstart',
-					function () {
-						spinBtn.classList.add('active');
-						this.querySelectorAll('.box').forEach((box) => {
-							box.style.filter = 'blur(1px)';
-						});
-					},
-					{ once: true }
-				)
+				setTimeout(() => {
+					spinBtn.classList.remove('active');
+					lever.classList.remove('active');
+				}, 400);
 
-				generalBoxesClone.addEventListener(
+				for (const door of doors) {
+					const boxes = door.querySelector('.boxes');
+					const duration = parseInt(boxes.style.transitionDuration);
+					boxes.style.transform = !door.dataset.spinned ? `translateY(-${poolHeight / 2}px)` : `translateY(0)`
+
+					await new Promise((resolve) => setTimeout(resolve, duration * 10));
+
+					generalBoxesClone.addEventListener(
+						'transitionstart',
+						function () {
+							this.querySelectorAll('.box').forEach((box) => {
+								box.style.filter = 'blur(1px)';
+							});
+						},
+						{ once: true }
+					)
+
+					generalBoxesClone.addEventListener(
+						'transitionend',
+						function () {
+							this.querySelectorAll('.box').forEach((box, index) => {
+								box.style.filter = 'blur(0)';
+								box.dataset.spinned = '1';
+								// box.dataset.doNotLookHere = items.find(el => el.id === +box.dataset.id).winner
+							});
+						},
+						{ once: true }
+					);
+				}
+
+				const leftBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(1)").querySelectorAll('.boxes > .box')[24]
+				const middleBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(2)").querySelectorAll('.boxes > .box')[24];
+				const rightBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(3)").querySelectorAll('.boxes > .box')[24];
+				const lastDoor = document.querySelectorAll('.doors')[2].querySelectorAll('.door')[2];
+
+				lastDoor.addEventListener(
 					'transitionend',
 					function () {
-						this.querySelectorAll('.box').forEach((box, index) => {
-							box.style.filter = 'blur(0)';
-							box.dataset.spinned = '1';
-							// box.dataset.doNotLookHere = items.find(el => el.id === +box.dataset.id).winner
-						});
+						disabled = false;
+
+						fireball.classList.remove('active')
+
+						//pulse after 1 spin
+						spinBtn.classList.add('pulseAnim');
+						atBlocks.forEach(block => block.classList.add('pulseAnim'));
+
+						if (spinCount === 3) {
+							macAudio.play();
+							fireworks.start();
+
+							overlay.classList.add('active');
+							wrapper.classList.add('active');
+							modal.classList.add('active');
+							return
+						} else {
+							if (leftBlock.dataset.doNotLookHere === 'true' &&
+								middleBlock.dataset.doNotLookHere === 'true' &&
+								rightBlock.dataset.doNotLookHere === 'true') {
+								bigWin.classList.add('active')
+								bigWinImg.classList.add('active');
+
+								setTimeout(() => {
+									lBarrel.classList.add('active');
+								}, 200);
+								setTimeout(() => {
+									mBarrel.classList.add('active');
+								}, 400);
+								setTimeout(() => {
+									rBarrel.classList.add('active');
+								}, 600);
+
+								setTimeout(() => {
+									bigWin.classList.remove('active')
+									bigWinImg.classList.remove('active');
+									lBarrel.classList.remove('active');
+									mBarrel.classList.remove('active');
+									rBarrel.classList.remove('active');
+
+									macAudio.play();
+									fireworks.start();
+									overlay.classList.add('active');
+									wrapper.classList.add('active');
+									modal.classList.add('active');
+
+								}, 2000);
+
+							}
+							return
+						}
 					},
 					{ once: true }
 				);
+				spinCount += 1;
 			}
-
-			const leftBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(1)").querySelectorAll('.boxes > .box')[24]
-			const middleBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(2)").querySelectorAll('.boxes > .box')[24];
-			const rightBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(3)").querySelectorAll('.boxes > .box')[24];
-			const lastDoor = document.querySelectorAll('.doors')[2].querySelectorAll('.door')[2];
-
-			lastDoor.addEventListener(
-				'transitionend',
-				function () {
-					spinBtn.classList.remove('active');
-					lever.classList.remove('active');
-					if (spinCount === 3) {
-						macAudio.play();
-						fireworks.start();
-
-						overlay.classList.add('active');
-						wrapper.classList.add('active');
-						modal.classList.add('active');
-						return
-					} else {
-						if (leftBlock.dataset.doNotLookHere === 'true' &&
-							middleBlock.dataset.doNotLookHere === 'true' &&
-							rightBlock.dataset.doNotLookHere === 'true') {
-							bigWin.classList.add('active')
-							bigWinImg.classList.add('active');
-
-							setTimeout(() => {
-								lBarrel.classList.add('active');
-							}, 200);
-							setTimeout(() => {
-								mBarrel.classList.add('active');
-							}, 400);
-							setTimeout(() => {
-								rBarrel.classList.add('active');
-							}, 600);
-
-							setTimeout(() => {
-								bigWin.classList.remove('active')
-								bigWinImg.classList.remove('active');
-								lBarrel.classList.remove('active');
-								mBarrel.classList.remove('active');
-								rBarrel.classList.remove('active');
-
-								macAudio.play();
-								fireworks.start();
-								overlay.classList.add('active');
-								wrapper.classList.add('active');
-								modal.classList.add('active');
-
-							}, 2000);
-
-						}
-						return
-					}
-				},
-				{ once: true }
-			);
-			spinCount += 1;
 		}
 
 		function shuffle([...arr]) {

@@ -40,11 +40,69 @@ body {
 	background: url('../img/pyramide-bg.png') 50% 0% no-repeat;
 	background-size: cover;
 	width: 100%;
-	height: 250px;
-	overflow: hidden;
+	height: 285px;
+	/* overflow: hidden; */
+}
+
+#fireball {
+	position: absolute;
+	top: 10%;
+	width: 950px;
+	opacity: 0;
+	visibility: hidden;
+	transition: all .7s linear;
+}
+
+#fireball.active {
+	visibility: visible;
+	opacity: .5;
+	-webkit-animation: fireballRotate 10s linear infinite, fireballScale 1s linear infinite alternate;
+	animation: fireballRotate 10s linear infinite, fireballScale 1s linear infinite alternate;
+}
+
+@-webkit-keyframes fireballRotate {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes fireballRotate {
+	0% {
+		transform: rotate(0deg)
+	}
+
+	100% {
+		transform: rotate(360deg)
+	}
+}
+
+
+@-webkit-keyframes fireballScale {
+	0% {
+		width: 850px;
+	}
+
+	100% {
+		width: 950px;
+	}
+}
+
+@keyframes fireballScale {
+	0% {
+		width: 850px;
+	}
+
+	100% {
+		width: 950px;
+	}
 }
 
 #lever {
+	cursor: pointer;
 	display: none;
 	position: absolute;
 	top: 0px;
@@ -52,6 +110,7 @@ body {
 	width: 100px;
 	height: 159px;
 	transition: transform .1s linear;
+	transform: scale(1.5);
 }
 
 #lever.active {
@@ -59,8 +118,8 @@ body {
 }
 
 #app {
-	width: 260px;
-	height: 245px;
+	width: 300px;
+	height: 275px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -76,22 +135,34 @@ body {
 }
 
 .door {
-	width: 57px;
-	height: 53px;
+	width: 90px;
+	height: 75px;
 	overflow: hidden;
 	border-radius: 5px;
 	margin: 5px;
 	position: relative;
 }
 
-.door::after {
+.doors:first-child .door::after {
 	position: absolute;
 	content: '';
-	width: 150px;
-	height: 130px;
+	width: 85px;
+	height: 82px;
 	top: 0;
-	left: 0;
-	background: linear-gradient(180deg, rgba(243, 207, 111, 0.6) 0%, rgba(250, 246, 237, 0.69) 100%);
+	left: 3px;
+	background: linear-gradient(180deg, #F4BA1F 0%, rgba(250, 246, 237, 0.69) 100%);
+	opacity: .7;
+}
+
+.doors:nth-child(3) .door::after {
+	position: absolute;
+	content: '';
+	width: 85px;
+	height: 82px;
+	top: 0;
+	left: 3px;
+	background: linear-gradient(180deg, rgba(202, 156, 33, 0.6) 0%, rgba(250, 246, 237, 0.69) 100%);
+	transform: matrix(1, 0, 0, -1, 0, 0);
 }
 
 .doors:nth-child(2)>.door::after {
@@ -109,7 +180,7 @@ body {
 }
 
 .reel-img {
-	width: 80%;
+	width: 90%;
 	height: auto;
 }
 
@@ -301,7 +372,7 @@ h1 {
 	width: 100vw;
 	/* min-height: 372px; */
 	max-width: 470px;
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 
 /* .deal-wheel-wrapper::before {
@@ -934,6 +1005,22 @@ canvas {
 	transform: translate(-50%, 0);
 }
 
+.pulseAnim {
+	-webkit-animation: pulse 1.2s linear infinite alternate;
+	animation: pulse 1.2s linear infinite alternate;
+}
+
+@-webkit-keyframes pulse {
+
+	0% {
+		transform: scale(1);
+	}
+
+	100% {
+		transform: scale(1.2);
+	}
+}
+
 @media (min-width: 480px) {
 	#lever {
 		display: block;
@@ -941,7 +1028,6 @@ canvas {
 }
 
 @media (min-width: 1024px) {
-
 	#app-wrapper {
 		display: flex;
 		justify-content: center;
@@ -949,7 +1035,7 @@ canvas {
 		background: url('../img/pyramide-bg.png') 50% 0% no-repeat;
 		background-size: 100%;
 		width: 900px;
-		height: 450px;
+		height: 480px;
 	}
 
 	#app {
@@ -964,7 +1050,7 @@ canvas {
 	}
 
 	.door {
-		width: 140px;
+		width: 155px;
 		height: 120px;
 		overflow: hidden;
 		margin: 0;
@@ -982,6 +1068,28 @@ canvas {
 		filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 	}
 
+	.doors:first-child .door::after {
+		position: absolute;
+		content: '';
+		width: 150px;
+		height: 150px;
+		top: 0;
+		left: 2px;
+		background: linear-gradient(180deg, #F4BA1F 0%, rgba(250, 246, 237, 0.69) 100%);
+		opacity: .7;
+	}
+
+	.doors:nth-child(3) .door::after {
+		position: absolute;
+		content: '';
+		width: 145px;
+		height: 153px;
+		top: 0;
+		left: 6px;
+		background: linear-gradient(180deg, rgba(202, 156, 33, 0.6) 0%, rgba(250, 246, 237, 0.69) 100%);
+		transform: matrix(1, 0, 0, -1, 0, 0);
+	}
+
 	#spinner span {
 		font-size: 25px;
 		line-height: 34px;
@@ -993,13 +1101,18 @@ canvas {
 	}
 
 	#lever {
-		right: 36px;
+		right: 26px;
 		width: 125px;
 		height: 296px;
 	}
 
 	#lever.active {
-		transform: matrix(1, 0, 0, -1, 0, 11);
+		transform: matrix(1.5, 0, 0, -1.5, 3, 15);
+	}
+
+	.reel-img {
+		width: 85%;
+		height: auto;
 	}
 
 	.big-win {
@@ -1146,7 +1259,7 @@ canvas {
 	}
 
 	.footer {
-		padding-bottom: 1.5em;
+		padding-bottom: 6em;
 	}
 
 	.row-1,

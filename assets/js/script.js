@@ -272,6 +272,7 @@ window.onload = (function () {
 		const modal = document.querySelector('.modal');
 		const fireball = document.querySelector('#fireball');
 		const container = document.querySelector('.fireworks');
+		const sound = document.querySelector('.sound')
 		const fireworks = new Fireworks.default(container, {
 			autoresize: true,
 			opacity: 0.5,
@@ -325,25 +326,48 @@ window.onload = (function () {
 			// }
 		});
 
-		let macAudio = document.querySelector('#mac')
-		window.addEventListener('click', () => {
-			macAudio.load();
-		})
-		window.addEventListener('touchstart', () => {
-			macAudio.load();
-		})
+		// let macAudio = document.querySelector('#mac')
+		// window.addEventListener('click', () => {
+		// 	macAudio.load();
+		// })
+		// window.addEventListener('touchstart', () => {
+		// 	macAudio.load();
+		// })
+
+		let macAudio = new Audio();
+		macAudio.autoplay = true;
+		macAudio.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+		macAudio.src = '../../assets/audio/win.mp3';
+
+		let macBGSound = new Audio();
+		macBGSound.src = "data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+		macBGSound.src = '../../assets/audio/bg-sound.mp3';
+		macBGSound.volume = 0.2;
+		macBGSound.loop = true;
+		macBGSound.load();
 
 		let atCount = 2;
 		let disabled = false;
 
 		spinBtn.addEventListener('click', spin);
 		lever.addEventListener('click', spin);
-
+		sound.addEventListener('click', toggleSound)
 
 		let generalBoxesClone,
 			poolHeight,
 			boxHeight,
 			spinCount = 1;
+
+		function toggleSound() {
+			sound.classList.toggle('on');
+			if (sound.classList.contains('on')) {
+				sound.src = '../assets/img/sound-on.svg'
+				macBGSound.play();
+			} else {
+				sound.src = '../assets/img/sound-off.svg';
+				macBGSound.pause();
+			}
+		}
 
 		function init(groups = 4, duration = 3) {
 			for (const door of doors) {
@@ -480,6 +504,9 @@ window.onload = (function () {
 							macAudio.play();
 							fireworks.start();
 
+							spinBtn.classList.remove('pulseAnim');
+							atBlocks.forEach(block => block.classList.remove('pulseAnim'));
+
 							overlay.classList.add('active');
 							wrapper.classList.add('active');
 							modal.classList.add('active');
@@ -488,6 +515,9 @@ window.onload = (function () {
 							if (leftBlock.dataset.doNotLookHere === 'true' &&
 								middleBlock.dataset.doNotLookHere === 'true' &&
 								rightBlock.dataset.doNotLookHere === 'true') {
+								spinBtn.classList.remove('pulseAnim');
+								atBlocks.forEach(block => block.classList.remove('pulseAnim'));
+
 								bigWin.classList.add('active')
 								bigWinImg.classList.add('active');
 

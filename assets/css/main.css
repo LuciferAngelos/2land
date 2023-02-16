@@ -22,12 +22,34 @@ body {
 	/* overflow: hidden; */
 	background-color: #00145C;
 	background: url('../img/bg.png') no-repeat 100%;
-	background-size: cover;
+	background-size: 100% 100%;
 	width: 100%;
 	height: 100%;
 	min-height: 100vh;
 	z-index: 1;
 	box-shadow: 0px 4px 4px 0px #000000;
+	-webkit-animation: bgPulse 15s linear infinite alternate;
+	animation: bgPulse 15s linear infinite alternate;
+}
+
+@-webkit-keyframes bgPulse {
+	0% {
+		background-size: 100% 100%;
+	}
+
+	100% {
+		background-size: 150% 150%;
+	}
+}
+
+@keyframes bgPulse {
+	0% {
+		background-size: 100% 100%;
+	}
+
+	100% {
+		background-size: 150% 150%;
+	}
 }
 
 /* *** */
@@ -56,8 +78,8 @@ body {
 #fireball.active {
 	visibility: visible;
 	opacity: .5;
-	-webkit-animation: fireballRotate 10s linear infinite, fireballScale 1s linear infinite alternate;
-	animation: fireballRotate 10s linear infinite, fireballScale 1s linear infinite alternate;
+	-webkit-animation: fireballRotate 10s linear infinite;
+	animation: fireballRotate 10s linear infinite;
 }
 
 @-webkit-keyframes fireballRotate {
@@ -77,27 +99,6 @@ body {
 
 	100% {
 		transform: rotate(360deg)
-	}
-}
-
-
-@-webkit-keyframes fireballScale {
-	0% {
-		width: 850px;
-	}
-
-	100% {
-		width: 950px;
-	}
-}
-
-@keyframes fireballScale {
-	0% {
-		width: 850px;
-	}
-
-	100% {
-		width: 950px;
 	}
 }
 
@@ -161,7 +162,7 @@ body {
 	height: 82px;
 	top: 0;
 	left: 3px;
-	background: linear-gradient(180deg, rgba(202, 156, 33, 0.6) 0%, rgba(250, 246, 237, 0.69) 100%);
+	background: linear-gradient(180deg, rgba(202, 156, 33, 0.6) 0%, rgba(250, 246, 237, 0.5) 100%);
 	transform: matrix(1, 0, 0, -1, 0, 0);
 }
 
@@ -256,11 +257,21 @@ body {
 }
 
 .logo {
+	position: relative;
 	height: 40px;
 }
 
 .logo img {
 	height: 100%;
+}
+
+.sound {
+	position: absolute;
+	right: 15px;
+	top: 27px;
+	cursor: pointer;
+	width: 23px;
+	height: 23px;
 }
 
 h1 {
@@ -1040,7 +1051,7 @@ canvas {
 
 	#app {
 		width: 500px;
-		height: 450px;
+		height: 468px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -1051,7 +1062,7 @@ canvas {
 
 	.door {
 		width: 155px;
-		height: 120px;
+		height: 148px;
 		overflow: hidden;
 		margin: 0;
 	}
@@ -1079,16 +1090,21 @@ canvas {
 		opacity: .7;
 	}
 
+	doors:nth-child(3) .door {
+		height: 120px !important;
+	}
+
 	.doors:nth-child(3) .door::after {
 		position: absolute;
 		content: '';
 		width: 145px;
-		height: 153px;
+		height: 120px;
 		top: 0;
 		left: 6px;
 		background: linear-gradient(180deg, rgba(202, 156, 33, 0.6) 0%, rgba(250, 246, 237, 0.69) 100%);
 		transform: matrix(1, 0, 0, -1, 0, 0);
 	}
+
 
 	#spinner span {
 		font-size: 25px;
@@ -1122,6 +1138,12 @@ canvas {
 		transform: translateY(0);
 		width: 100%;
 		height: 100%;
+	}
+
+	.sound {
+		right: 25px;
+		width: 46px;
+		height: 44px;
 	}
 
 	.logo {

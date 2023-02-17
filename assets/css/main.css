@@ -21,15 +21,19 @@ body {
 	/* если что-то не помещается на своё место — скрываем то, что не поместилось */
 	/* overflow: hidden; */
 	background-color: #00145C;
-	background: url('../img/bg.png') no-repeat 100%;
+	background: url('../img/bg.png') no-repeat;
+	background-position: center center;
 	background-size: 100% 100%;
 	width: 100%;
 	height: 100%;
 	min-height: 100vh;
 	z-index: 1;
 	box-shadow: 0px 4px 4px 0px #000000;
-	-webkit-animation: bgPulse 15s linear infinite alternate;
-	animation: bgPulse 15s linear infinite alternate;
+}
+
+.bg-pulse {
+	-webkit-animation: bgPulse 45s linear infinite alternate;
+	animation: bgPulse 45s linear infinite alternate;
 }
 
 @-webkit-keyframes bgPulse {
@@ -127,6 +131,15 @@ body {
 	align-items: center;
 	background: url('../img/reels-border.png') no-repeat;
 	background-size: 100%;
+}
+
+.doors-wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
 }
 
 .doors {
@@ -1060,9 +1073,19 @@ canvas {
 		background-size: 100%;
 	}
 
+	.doors-wrapper {
+		width: 100%;
+		height: 415px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+		margin-top: -15px;
+	}
+
 	.door {
 		width: 155px;
-		height: 148px;
+		height: calc(415px / 3);
 		overflow: hidden;
 		margin: 0;
 	}
@@ -1083,22 +1106,26 @@ canvas {
 		position: absolute;
 		content: '';
 		width: 150px;
-		height: 150px;
+		height: calc(415px / 3);
 		top: 0;
 		left: 2px;
 		background: linear-gradient(180deg, #F4BA1F 0%, rgba(250, 246, 237, 0.69) 100%);
 		opacity: .7;
 	}
 
-	doors:nth-child(3) .door {
+	/* .doors:nth-child(2) .door {
 		height: 120px !important;
 	}
+
+	.doors:nth-child(3) .door {
+		height: 120px !important;
+	} */
 
 	.doors:nth-child(3) .door::after {
 		position: absolute;
 		content: '';
 		width: 145px;
-		height: 120px;
+		height: calc(415px / 3);
 		top: 0;
 		left: 6px;
 		background: linear-gradient(180deg, rgba(202, 156, 33, 0.6) 0%, rgba(250, 246, 237, 0.69) 100%);

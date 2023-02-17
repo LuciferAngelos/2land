@@ -361,10 +361,10 @@ window.onload = (function () {
 		function toggleSound() {
 			sound.classList.toggle('on');
 			if (sound.classList.contains('on')) {
-				sound.src = '../assets/img/sound-on.svg'
+				sound.src = 'assets/img/sound-on.svg'
 				macBGSound.play();
 			} else {
-				sound.src = '../assets/img/sound-off.svg';
+				sound.src = 'assets/img/sound-off.svg';
 				macBGSound.pause();
 			}
 		}
@@ -484,9 +484,9 @@ window.onload = (function () {
 					);
 				}
 
-				const leftBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(1)").querySelectorAll('.boxes > .box')[24]
-				const middleBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(2)").querySelectorAll('.boxes > .box')[24];
-				const rightBlock = document.querySelector("#app > div:nth-child(2) > div:nth-child(3)").querySelectorAll('.boxes > .box')[24];
+				const leftBlock = document.querySelector("#app > .doors-wrapper > div:nth-child(2) > div:nth-child(1)").querySelectorAll('.boxes > .box')[24]
+				const middleBlock = document.querySelector("#app > .doors-wrapper > div:nth-child(2) > div:nth-child(2)").querySelectorAll('.boxes > .box')[24];
+				const rightBlock = document.querySelector("#app > .doors-wrapper > div:nth-child(2) > div:nth-child(3)").querySelectorAll('.boxes > .box')[24];
 				const lastDoor = document.querySelectorAll('.doors')[2].querySelectorAll('.door')[2];
 
 				lastDoor.addEventListener(
@@ -504,6 +504,7 @@ window.onload = (function () {
 							macAudio.play();
 							fireworks.start();
 
+							document.body.classList.remove('bg-pulse')
 							spinBtn.classList.remove('pulseAnim');
 							atBlocks.forEach(block => block.classList.remove('pulseAnim'));
 
@@ -515,6 +516,7 @@ window.onload = (function () {
 							if (leftBlock.dataset.doNotLookHere === 'true' &&
 								middleBlock.dataset.doNotLookHere === 'true' &&
 								rightBlock.dataset.doNotLookHere === 'true') {
+								document.body.classList.remove('bg-pulse')
 								spinBtn.classList.remove('pulseAnim');
 								atBlocks.forEach(block => block.classList.remove('pulseAnim'));
 
